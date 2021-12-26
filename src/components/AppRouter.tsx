@@ -1,21 +1,15 @@
 import React from 'react';
-import {Router, Routes, Route} from "react-router-dom";
-import {privateRoutes, publicRoutes} from "../router/router";
-import Login from "../pages/Login";
-import Event from "../pages/Event";
+import {PrivateRoutes, PublicRoutes} from "../router/router";
+import {useTypedSelector} from "../hooks/useTypedSelector";
 
 const AppRouter:React.FC = () => {
-  const auth = false
+
+  const {isAuth} = useTypedSelector(state => state.authReducer)
 
   return (
-    auth
-      ? <Routes>
-          <Route path={'/'} element={<Event />} />
-        </Routes>
-
-      : <Routes>
-          <Route path={'/login'} element={<Login />} />
-        </Routes>
+    isAuth
+      ? <PrivateRoutes />
+      : <PublicRoutes />
   );
 };
 
