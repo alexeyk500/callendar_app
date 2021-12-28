@@ -15,6 +15,7 @@ function App() {
       setUser({username: localStorage.getItem('userName') || ''} as IUser)
       setIsAuth(true)
     }
+    // eslint-disable-next-line
   },[])
 
   return (
