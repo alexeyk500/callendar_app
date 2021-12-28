@@ -1,18 +1,19 @@
 import React from 'react';
 import {Header} from "antd/es/layout/layout";
-import {Col, Layout, Menu, Row} from "antd";
+import {Layout, Menu, Row} from "antd";
 import {useNavigate} from "react-router-dom";
 import {useTypedSelector} from "../hooks/useTypedSelector";
+import {useActions} from "../hooks/useActions";
 
 const NavBar:React.FC = () => {
 
-  const {isAuth} = useTypedSelector(state => state.authReducer)
+  const {isAuth, user} = useTypedSelector(state => state.authReducer)
+  const {logout} = useActions()
 
   const navigate = useNavigate()
 
   const onClickLogout = () => {
-    console.log('Logout')
-    navigate('/login')
+    logout()
   }
 
   const onClickLogin = () => {
@@ -26,7 +27,7 @@ const NavBar:React.FC = () => {
             ?
             <Row justify={"end"}>
               <div className={"nav-bar"}>
-                A500
+                {user.username}
               </div>
               <Menu theme="dark" mode="horizontal" selectable={false} style={{float: 'right', minWidth: '100px'}} className={"nav-bar"}>
                 <Menu.Item onClick={onClickLogout} key="1">Logout</Menu.Item>
