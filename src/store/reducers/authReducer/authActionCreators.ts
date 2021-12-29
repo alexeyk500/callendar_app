@@ -1,24 +1,24 @@
-import {AuthActionEnum, SetErrorAction, SetIsAuthAction, SetIsLoadingAction, SetUserAction} from "./authReducerTypes";
+import {AuthActionsEnum, SetErrorAction, SetIsAuthAction, SetIsLoadingAction, SetUserAction} from "./authReducerTypes";
 import {IUser} from "../../../models/IUser";
 import {AppDispatch} from "../../store";
-import axios from "axios";
+import UserService from "../../../api/userService";
 
 export const authActionCreators = {
 
-  setIsAuth: (isAuth: boolean): SetIsAuthAction => ({type: AuthActionEnum.SET_IS_AUTH, payload: isAuth}),
+  setIsAuth: (isAuth: boolean): SetIsAuthAction => ({type: AuthActionsEnum.SET_IS_AUTH, payload: isAuth}),
 
-  setUser: (user: IUser): SetUserAction => ({type: AuthActionEnum.SET_USER, payload: user}),
+  setUser: (user: IUser): SetUserAction => ({type: AuthActionsEnum.SET_USER, payload: user}),
 
-  setError: (error: string): SetErrorAction => ({type: AuthActionEnum.SET_ERROR, payload: error}),
+  setError: (error: string): SetErrorAction => ({type: AuthActionsEnum.SET_ERROR, payload: error}),
 
-  setIsLoading: (isLoading: boolean): SetIsLoadingAction => ({type: AuthActionEnum.SET_IS_LOADING, payload: isLoading}),
+  setIsLoading: (isLoading: boolean): SetIsLoadingAction => ({type: AuthActionsEnum.SET_IS_LOADING, payload: isLoading}),
 
   login: (username: string, password: string) => async (dispatch: AppDispatch) => {
     try {
       dispatch(authActionCreators.setIsLoading(true))
 
       setTimeout(async () => {
-        const response = await axios.get<IUser[]>('./user.json')
+        const response = await UserService.getUsers()
         const mockUsers = response.data
         const mockUser = mockUsers.find(user => {
           return (user.username === username && user.password === password)
@@ -26,8 +26,8 @@ export const authActionCreators = {
         if (mockUser) {
           localStorage.setItem('isAuth', 'true')
           localStorage.setItem('userName', mockUser.username)
-          dispatch(authActionCreators.setIsAuth(true))
           dispatch(authActionCreators.setUser(mockUser))
+          dispatch(authActionCreators.setIsAuth(true))
         } else {
           dispatch(authActionCreators.setError('Wrong password or user does not exist'))
         }

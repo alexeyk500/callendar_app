@@ -7,7 +7,7 @@ export type AuthInitialStateType = {
   error: string
 }
 
-export enum AuthActionEnum {
+export enum AuthActionsEnum {
   SET_IS_AUTH = "SET_IS_AUTH",
   SET_USER = "SET_USER",
   SET_IS_LOADING = "SET_IS_LOADING",
@@ -15,22 +15,22 @@ export enum AuthActionEnum {
 }
 
 export interface SetIsAuthAction {
-  type: AuthActionEnum.SET_IS_AUTH,
+  type: AuthActionsEnum.SET_IS_AUTH,
   payload: boolean
 }
 
 export interface SetUserAction {
-  type: AuthActionEnum.SET_USER,
+  type: AuthActionsEnum.SET_USER,
   payload: IUser
 }
 
 export interface SetIsLoadingAction {
-  type: AuthActionEnum.SET_IS_LOADING,
+  type: AuthActionsEnum.SET_IS_LOADING,
   payload: boolean
 }
 
 export interface SetErrorAction {
-  type: AuthActionEnum.SET_ERROR,
+  type: AuthActionsEnum.SET_ERROR,
   payload: string
 }
 

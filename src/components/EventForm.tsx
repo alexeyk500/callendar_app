@@ -1,50 +1,90 @@
 import React, {useState} from 'react';
 import {Button, DatePicker, Form, Input, Row, Select} from "antd";
+import {IUser} from "../models/IUser";
+import {IEvent} from "../models/IEvent";
+import {Moment} from "moment";
+import {formatDate} from "../utils/formatDate";
+import {useTypedSelector} from "../hooks/useTypedSelector";
+import {validatorIsDataAfter} from "../utils/validatorIsDataAfter";
 
-const EventForm:React.FC = () => {
+interface EventFormProps {
+  guests: IUser[],
+  onSubmit: (event: IEvent)=>void,
+}
 
-  const [description, setDescription] = useState('')
+const EventForm:React.FC <EventFormProps> = (props) => {
 
-  const onChangeEvent = (e:  React.ChangeEvent<HTMLInputElement>) => {
-    setDescription(e.target.value)
+  const [event, setEvent] = useState<IEvent>({
+    author: '',
+    date: '',
+    description: '',
+    guest: ''
+  })
+
+  const {user} = useTypedSelector(state => state.authReducer)
+
+  const onChangeDescription = (e:  React.ChangeEvent<HTMLInputElement>) => {
+    setEvent({...event, description: e.target.value})
   }
 
-  const onChangeDatePicker = () => {
+  const onChangeGuest = (guest: string) => {
+    setEvent({...event, guest: guest})
+  }
 
+  const onChangeDatePicker = (date: Moment | null) => {
+    if (date) {
+      setEvent({...event, date: formatDate(date.toDate())})
+    }
+  }
+
+  const onSubmitForm = () => {
+    console.log('event', {...event, author: user.username})
+    props.onSubmit({...event, author: user.username})
   }
 
   return (
-    <Form>
+    <Form
+      onFinish={onSubmitForm}
+    >
       <Form.Item
-        label="description"
+        label="Event description"
         name="description"
         rules={[{ required: true, message: 'Please type your description!' }]}
       >
         <Input
           autoComplete={'off'}
-          value={description}
-          onChange={onChangeEvent}
+          value={event.description}
+          onChange={onChangeDescription}
         />
       </Form.Item>
 
       <Form.Item
-        label="datePicker"
+        label="Select date"
         name="datePicker"
-        rules={[{ required: true}]}
+        rules={[{ required: true}, validatorIsDataAfter('Selected data is too late')]}
       >
         <DatePicker onChange={onChangeDatePicker} />
       </Form.Item>
 
       <Form.Item
-        label="select"
-        name="select"
+        label="Select guest"
+        name="guest"
       >
-        <Select>
-          <Select.Option value="lucy">Lucy</Select.Option>
-          <Select.Option value="lucy">Lucy</Select.Option>
-          <Select.Option value="lucy">Lucy</Select.Option>
+        <Select
+          onChange={onChangeGuest}
+        >
+          {
+            props.guests.map(user=>{
+              return (
+                <Select.Option
+                  key={user.username}
+                  value={user.username}
+                >
+                  {user.username}
+                </Select.Option>)
+            })
+          }
         </Select>
-
       </Form.Item>
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
