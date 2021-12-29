@@ -34,17 +34,21 @@ const Event:React.FC = () => {
   }
 
   return (
-    <div>
-      <EventCalendar
-        events={events}
-      />
-      <Row justify={'center'}>
-        <Button
-          onClick={onClickAddEvent}
-        >
-          add Event
-        </Button>
+    <div style={{maxWidth: '1400px', margin: '0 auto',}}>
+      <Row justify={"center"} align={"middle"} className={"h100"} >
+          <EventCalendar
+            events={events}
+          />
+          <Row justify={'center'}>
+            <Button
+              type={'primary'}
+              onClick={onClickAddEvent}
+            >
+              add Event
+            </Button>
+          </Row>
       </Row>
+
       <Modal
         title="Create Event for calendar"
         visible={isModalVisible}

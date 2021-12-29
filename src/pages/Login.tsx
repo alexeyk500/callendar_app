@@ -6,7 +6,7 @@ const Login:React.FC= () => {
   return (
     <Layout>
       <Row justify={"center"} align={"middle"} className={"h100"}>
-        <Card>
+        <Card className={'cards'}>
           <LoginForm />
         </Card>
       </Row>

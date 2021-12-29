@@ -89,7 +89,7 @@ const EventForm:React.FC <EventFormProps> = (props) => {
 
       <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
         <Row justify={'end'}>
-          <Button type="primary" htmlType="submit" >
+          <Button type={'primary'} htmlType={'submit'} >
             Create
           </Button>
         </Row>
